@@ -1,8 +1,7 @@
 import { FormEvent, useState } from "react";
 import { ArrowRight, Eye, EyeOff, LogIn, Mail, Menu, UserPlus, UserRound, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, googleProvider, githubProvider } from "../firebase";
+
 function Mark() {
   return <img className="brand-logo" src="https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2Fedc9c5030ad24ea5a6373f49e2efffc5?format=webp&width=800&height=1200" alt="VIRASYA" />;
 }
@@ -41,12 +40,13 @@ export default function Login() {
       }
       setIsLoading(true);
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password.trim());
-        const user = { name: name.trim(), email: userCredential.user.email, avatar: userCredential.user.photoURL };
+        // Mock account creation
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const user = { name: name.trim(), email: email.trim(), avatar: "" };
         localStorage.setItem("virasya-user", JSON.stringify(user));
         navigate("/dashboard");
       } catch (err: any) {
-        setError(err.message || "Failed to create account.");
+        setError("Failed to create account.");
       } finally {
         setIsLoading(false);
       }
@@ -57,12 +57,13 @@ export default function Login() {
       }
       setIsLoading(true);
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email.trim(), password.trim());
-        const user = { name: userCredential.user.displayName || "User", email: userCredential.user.email, avatar: userCredential.user.photoURL };
+        // Mock sign in
+        await new Promise(resolve => setTimeout(resolve, 800));
+        const user = { name: "Demo User", email: email.trim(), avatar: "" };
         localStorage.setItem("virasya-user", JSON.stringify(user));
         navigate("/dashboard");
       } catch (err: any) {
-        setError(err.message || "Failed to sign in. Check your credentials.");
+        setError("Failed to sign in. Check your credentials.");
       } finally {
         setIsLoading(false);
       }
@@ -73,17 +74,17 @@ export default function Login() {
     setIsLoading(true);
     setError("");
     try {
-      const authProvider = provider === "Google" ? googleProvider : githubProvider;
-      const userCredential = await signInWithPopup(auth, authProvider);
+      // Mock OAuth sign in
+      await new Promise(resolve => setTimeout(resolve, 800));
       const user = { 
-        name: userCredential.user.displayName || `${provider} User`, 
-        email: userCredential.user.email,
-        avatar: userCredential.user.photoURL
+        name: `${provider} User`, 
+        email: `demo@${provider.toLowerCase()}.com`,
+        avatar: ""
       };
       localStorage.setItem("virasya-user", JSON.stringify(user));
       navigate("/dashboard");
     } catch (err: any) {
-      setError(err.message || `Failed to sign in with ${provider}.`);
+      setError(`Failed to sign in with ${provider}.`);
     } finally {
       setIsLoading(false);
     }
