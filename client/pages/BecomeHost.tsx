@@ -130,10 +130,10 @@ export default function BecomeHost() {
           <h2>Tell us about<br /><em>your traditions.</em></h2>
           <div className="form-divider" />
           <div className="form-grid">
-            <label className="form-field">Your Name<input name="name" required placeholder="Full Name" /></label>
-            <label className="form-field">Heritage Type<input name="heritage" required placeholder="e.g. Master Weaver, Oral Historian" /></label>
-            <label className="form-field">Where are you from?<input name="region" required placeholder="Town or Region" /></label>
-            <label className="form-field">Your email<input name="email" type="email" required placeholder="So we can send the toolkit" /></label>
+            <label className="form-field">Your Name<input name="name" required placeholder="Full Name" defaultValue="Kiran Pattanaik" /></label>
+            <label className="form-field">Heritage Type<input name="heritage" required placeholder="e.g. Master Weaver, Oral Historian" defaultValue="Oral Historian" /></label>
+            <label className="form-field">Where are you from?<input name="region" required placeholder="Town or Region" defaultValue="Puri, Odisha" /></label>
+            <label className="form-field">Your email<input name="email" type="email" required placeholder="So we can send the toolkit" defaultValue="kiran@virasya.org" /></label>
           </div>
           <div className="form-field story-field" style={{ position: 'relative' }}>
             <label htmlFor="details">

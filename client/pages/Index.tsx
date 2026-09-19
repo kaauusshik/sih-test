@@ -195,7 +195,7 @@ export default function Index() {
           <nav id="primary-navigation" className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Primary navigation">
             <Link to="/stories" onClick={closeMenu}>Explore stories</Link>
             <Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link>
-
+            <Link to="/studio" onClick={closeMenu}>AI story studio</Link>
             <Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>
             {user ? (
               <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link>
@@ -240,7 +240,7 @@ export default function Index() {
       <section className="memory section-rule" id="memory">
         <div className="container split-section reversed">
           <div className="memory-art">
-            <img src="/grandmother-stories.jpg" alt="Grandmother telling stories to grandchildren" className="memory-art-image" />
+            <img src="https://images.unsplash.com/photo-1605335028442-f04523c02d18?auto=format&fit=crop&w=800&q=80" alt="Grandmother telling stories to grandchildren" className="memory-art-image" style={{ objectFit: 'cover' }} />
           </div>
           <div className="section-copy">
             <Eyebrow>A living archive</Eyebrow>
@@ -274,8 +274,8 @@ export default function Index() {
             <p>Dive into a growing collection of cultural artifacts, folklore, and memories preserved by the community.</p>
             <Link className="button" to="/stories">Explore stories <ArrowRight size={16} /></Link>
           </div>
-          <div className="memory-art">
-            <img src="/explore-stories.jpg" alt="Ancient journal glowing with stories" className="memory-art-image" />
+          <div className="memory-art archive-hero-art">
+            <img src="https://images.unsplash.com/photo-1601758177266-bc599de87707?auto=format&fit=crop&w=800&q=80" alt="Ancient journal glowing with stories" className="memory-art-image" style={{ objectFit: 'cover' }} />
           </div>
         </div>
       </section>

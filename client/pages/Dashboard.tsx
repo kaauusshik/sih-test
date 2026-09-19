@@ -18,6 +18,21 @@ function getInitials(name: string): string {
   return name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
 }
 
+const savedStoriesMock = [
+  { id: 1, title: "Threads of memory", category: "Craft & song", image: "https://images.unsplash.com/photo-1712210332599-0cb76e647e43?auto=format&fit=crop&w=1200&q=85", region: "Kutch, Gujarat", duration: "12 min", excerpt: "The intricate beadwork patterns passed down through five generations..." },
+  { id: 2, title: "Monsoon lullabies", category: "Oral history", image: "https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&w=1200&q=85", region: "Alappuzha, Kerala", duration: "18 min", excerpt: "A collection of songs sung by grandmothers when the rains arrive..." },
+  { id: 3, title: "Spice & Memory", category: "Food heritage", image: "https://images.unsplash.com/photo-1610192770281-9b1d9bf5b31d?auto=format&fit=crop&w=1200&q=85", region: "Chettinad, TN", duration: "14 min", excerpt: "The grinding stone in our courtyard holds the echoes of three generations..." },
+  { id: 4, title: "Mountain Echoes", category: "Oral history", image: "https://images.unsplash.com/photo-1600096194534-95cf5ece04cf?auto=format&fit=crop&w=1200&q=85", region: "Leh, Ladakh", duration: "21 min", excerpt: "Winter stories are different from summer stories. The snow makes everything quiet..." },
+];
+
+const archivesMock = [
+  { id: 1, title: "Grandmother's Pickle Recipe", date: "September 15, 2026", type: "Text and Audio" },
+  { id: 2, title: "Diwali Folk Song (Awadhi)", date: "August 22, 2026", type: "Audio Recording" },
+  { id: 3, title: "Field Notes: Terracotta Artisans", date: "July 10, 2026", type: "Text and Image" },
+  { id: 4, title: "Weaving pattern variations (Patan Patola)", date: "May 05, 2026", type: "Image gallery" },
+  { id: 5, title: "Harvest festival prayers in Khasi", date: "April 12, 2026", type: "Audio transcription" },
+];
+
 export default function Dashboard() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(getUser);
@@ -156,33 +171,24 @@ export default function Dashboard() {
 
     <section className="container dashboard-tabs">
       <div className="dashboard-tabs-nav">
-        <button className="active">Saved stories (2)</button>
-        <button>Archives (3)</button>
+        <button className="active">Saved stories ({savedStoriesMock.length})</button>
+        <button>Archives ({archivesMock.length + artifactCount})</button>
         <button>My recordings (1)</button>
       </div>
 
       <div className="dashboard-grid">
-        <article className="story-card">
-          <div className="story-card-image" style={{ backgroundImage: `url(https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2F8a1dd3f0ed6944da93498b5cd870c918)` }}>
-            <span className="story-category">Crafts</span>
-          </div>
-          <div className="story-card-content">
-            <p className="eyebrow">Gujarat · 3 min</p>
-            <h3>Threads of memory</h3>
-            <p>The intricate beadwork patterns passed down through five generations...</p>
-          </div>
-        </article>
-        
-        <article className="story-card">
-          <div className="story-card-image" style={{ backgroundImage: `url(https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2F58971fce8d5349f78fec2db8fc3d02a9)` }}>
-            <span className="story-category">Oral History</span>
-          </div>
-          <div className="story-card-content">
-            <p className="eyebrow">Kerala · 7 min</p>
-            <h3>Monsoon lullabies</h3>
-            <p>A collection of songs sung by grandmothers when the rains arrive...</p>
-          </div>
-        </article>
+        {savedStoriesMock.map((story) => (
+          <article className="story-card" key={story.id}>
+            <div className="story-card-image" style={{ backgroundImage: `url(${story.image})` }}>
+              <span className="story-category">{story.category}</span>
+            </div>
+            <div className="story-card-content">
+              <p className="eyebrow">{story.region} · {story.duration}</p>
+              <h3>{story.title}</h3>
+              <p>{story.excerpt}</p>
+            </div>
+          </article>
+        ))}
       </div>
 
       <div className="dashboard-section-header">
@@ -190,30 +196,16 @@ export default function Dashboard() {
       </div>
       
       <div className="dashboard-archives-list">
-        <div className="archive-item">
-          <div className="archive-icon"><Bookmark size={16} /></div>
-          <div className="archive-info">
-            <h4>Grandmother's Pickle Recipe</h4>
-            <p>Preserved on September 15, 2026 · Text and Audio</p>
+        {archivesMock.map((archive) => (
+          <div className="archive-item" key={archive.id}>
+            <div className="archive-icon"><Bookmark size={16} /></div>
+            <div className="archive-info">
+              <h4>{archive.title}</h4>
+              <p>Preserved on {archive.date} · {archive.type}</p>
+            </div>
+            <button className="button button-small">View</button>
           </div>
-          <button className="button button-small">View</button>
-        </div>
-        <div className="archive-item">
-          <div className="archive-icon"><Bookmark size={16} /></div>
-          <div className="archive-info">
-            <h4>Diwali Folk Song (Awadhi)</h4>
-            <p>Preserved on August 22, 2026 · Audio Recording</p>
-          </div>
-          <button className="button button-small">View</button>
-        </div>
-        <div className="archive-item">
-          <div className="archive-icon"><Bookmark size={16} /></div>
-          <div className="archive-info">
-            <h4>Field Notes: Terracotta Artisans</h4>
-            <p>Preserved on July 10, 2026 · Text and Image</p>
-          </div>
-          <button className="button button-small">View</button>
-        </div>
+        ))}
       </div>
     </section>
 

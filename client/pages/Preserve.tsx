@@ -97,12 +97,12 @@ export default function Preserve() {
           <h2>What would you<br /><em>like to pass on?</em></h2>
           <div className="form-divider" />
           <div className="form-grid">
-            <label className="form-field">Story title<input name="title" required placeholder="The summer the river came" /></label>
-            <label className="form-field">Who carries this story?<input name="storyteller" required placeholder="Your name or their name" /></label>
-            <label className="form-field">Where is it from?<input name="region" required placeholder="Town, region, or home" /></label>
-            <label className="form-field">Your email <small>(optional)</small><input name="email" type="email" placeholder="So we can follow up" /></label>
+            <label className="form-field">Story title<input name="title" required placeholder="The summer the river came" defaultValue="Grandmother's Khichdi" /></label>
+            <label className="form-field">Who carries this story?<input name="storyteller" required placeholder="Your name or their name" defaultValue="Nirmala Devi" /></label>
+            <label className="form-field">Where is it from?<input name="region" required placeholder="Town, region, or home" defaultValue="Puri, Odisha" /></label>
+            <label className="form-field">Your email <small>(optional)</small><input name="email" type="email" placeholder="So we can follow up" defaultValue="demo@virasya.org" /></label>
           </div>
-          <label className="form-field story-field">The story <small>Write it how you remember it</small><textarea name="story" required rows={8} placeholder="My grandmother used to say..." /></label>
+          <label className="form-field story-field">The story <small>Write it how you remember it</small><textarea name="story" required rows={8} placeholder="My grandmother used to say..." defaultValue="My grandmother used to say that every recipe begins with a story. When the monsoon came, she would make a pot of khichdi and call every neighbour home. The scent of roasted cumin and ghee would fill the courtyard, a signal that the rains were here to stay. This isn't just a recipe; it's the memory of a house that was always open to everyone." /></label>
           <label className="upload-field"><FileAudio size={20} /><span><strong>Add a voice note</strong><small>{fileName || "Optional · audio upload is MOCKED in this preview"}</small></span><input name="audio" type="file" accept="audio/*" onChange={(event) => setFileName(event.target.files?.[0]?.name || "")} /></label>
           <div className="form-footer"><p>By sharing, you agree that Virāsaya may preserve this story with care.</p><button className="button" type="submit">Place it in the archive <ArrowRight size={16} /></button></div>
         </form>
