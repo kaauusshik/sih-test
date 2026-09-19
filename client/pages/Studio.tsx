@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { useState, useEffect, useRef } from "react";
-import { AudioLines, Languages, LogIn, Mail, Menu, Mic, Search, Sparkles, WandSparkles, X } from "lucide-react";
+import { AudioLines, Languages, LogIn, Mail, Menu, Mic, Search, Sparkles, WandSparkles, X, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Mark() { return <img className="brand-logo" src="https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2Fedc9c5030ad24ea5a6373f49e2efffc5?format=webp&width=800&height=1200" alt="VIRASYA" />; }
@@ -193,16 +193,29 @@ export default function Studio() {
             <p className="eyebrow" style={{ marginBottom: "12px", color: "var(--text-secondary)" }}>Recorded Voice Note</p>
             <audio controls src={audioUrl} style={{ width: "100%", height: "40px" }} />
             {hasPendingTranscription && (
-              <button 
-                className="button" 
-                onClick={() => {
-                  setMemory(prev => prev + (prev ? " " : "") + hiddenTranscriptRef.current);
-                  setHasPendingTranscription(false);
-                }}
-                style={{ marginTop: "12px", width: "100%", background: "var(--text)", color: "var(--background)", display: "flex", justifyContent: "center", gap: "8px" }}
-              >
-                <Sparkles size={16} /> Transcribe Audio to Text
-              </button>
+              <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
+                <button 
+                  className="button" 
+                  onClick={() => {
+                    setAudioUrl(null);
+                    setHasPendingTranscription(false);
+                    hiddenTranscriptRef.current = "";
+                  }}
+                  style={{ flex: 1, background: "transparent", border: "1px solid var(--border)", color: "var(--text-secondary)", display: "flex", justifyContent: "center", gap: "8px" }}
+                >
+                  <Trash2 size={16} /> Discard
+                </button>
+                <button 
+                  className="button" 
+                  onClick={() => {
+                    setMemory(prev => prev + (prev ? " " : "") + hiddenTranscriptRef.current);
+                    setHasPendingTranscription(false);
+                  }}
+                  style={{ flex: 2, background: "var(--text)", color: "var(--background)", display: "flex", justifyContent: "center", gap: "8px" }}
+                >
+                  <Sparkles size={16} /> Confirm & Transcribe
+                </button>
+              </div>
             )}
           </div>
         )}
