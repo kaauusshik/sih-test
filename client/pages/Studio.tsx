@@ -77,7 +77,18 @@ export default function Studio() {
     }
   }, []);
 
-  const toggleRecording = () => {
+  useEffect(() => {
+    if (recognitionRef.current) {
+      const speechLangCodes: Record<string, string> = {
+        English: "en-IN", Hindi: "hi-IN", Odia: "or-IN", Gujarati: "gu-IN", 
+        Tamil: "ta-IN", Telugu: "te-IN", Kannada: "kn-IN", Malayalam: "ml-IN", 
+        Haryanvi: "hi-IN", Marathi: "mr-IN", Assamese: "as-IN", Urdu: "ur-IN"
+      };
+      recognitionRef.current.lang = speechLangCodes[dialect] || 'en-IN';
+    }
+  }, [dialect]);
+
+  const toggleRecording = async () => {
     if (!recognitionRef.current) {
       alert("Voice recording is not supported in your browser. Please try Chrome or Edge.");
       return;
@@ -88,13 +99,14 @@ export default function Studio() {
       recognitionRef.current.stop();
       setRecording(false);
     } else {
-
       try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
         isRecordingRef.current = true;
         recognitionRef.current.start();
         setRecording(true);
       } catch (e) {
-        console.error(e);
+        console.error("Microphone error:", e);
+        alert("Please allow microphone access to use this feature.");
       }
     }
   };
