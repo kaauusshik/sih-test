@@ -8,12 +8,13 @@ function Mark() { return <img className="brand-logo" src="https://cdn.builder.io
 export default function Studio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [memory, setMemory] = useState("");
-  const [interimMemory, setInterimMemory] = useState("");
   const [dialect, setDialect] = useState("English");
   const [recording, setRecording] = useState(false);
   const [processed, setProcessed] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [translatedText, setTranslatedText] = useState("");
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [hasPendingTranscription, setHasPendingTranscription] = useState(false);
   const [user] = useState<{ name: string; email: string; avatar?: string } | null>(() => {
     try { return JSON.parse(localStorage.getItem("virasya-user") || "null"); } catch { return null; }
   });
@@ -21,6 +22,9 @@ export default function Studio() {
 
   const recognitionRef = useRef<any>(null);
   const isRecordingRef = useRef(false);
+  const hiddenTranscriptRef = useRef<string>("");
+  const mediaRecorderRef = useRef<any>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   useEffect(() => {
     // @ts-ignore
@@ -33,28 +37,23 @@ export default function Studio() {
 
       recognition.onresult = (event: any) => {
         let finalTranscript = '';
-        let currentInterim = '';
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
             finalTranscript += transcript + ' ';
-          } else {
-            currentInterim += transcript;
           }
         }
         if (finalTranscript) {
-          setMemory((prev) => prev + finalTranscript);
+          hiddenTranscriptRef.current += finalTranscript;
         }
-        setInterimMemory(currentInterim);
       };
 
       recognition.onerror = (event: any) => {
         if (event.error !== 'no-speech') {
           console.error("Speech recognition error", event.error);
-          alert("Microphone error: " + event.error + ". Please ensure your microphone is connected and allowed.");
+          alert("Speech recognition error: " + event.error);
           isRecordingRef.current = false;
           setRecording(false);
-          setInterimMemory("");
         }
       };
 
@@ -69,7 +68,6 @@ export default function Studio() {
           }, 100);
         } else {
           setRecording(false);
-          setInterimMemory("");
         }
       };
 
@@ -97,10 +95,37 @@ export default function Studio() {
     if (recording) {
       isRecordingRef.current = false;
       recognitionRef.current.stop();
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
       setRecording(false);
     } else {
       try {
-        await navigator.mediaDevices.getUserMedia({ audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        
+        // Reset state
+        setAudioUrl(null);
+        hiddenTranscriptRef.current = "";
+        setHasPendingTranscription(false);
+        audioChunksRef.current = [];
+        
+        // Setup MediaRecorder
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+          }
+        };
+        mediaRecorder.onstop = () => {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          const url = URL.createObjectURL(audioBlob);
+          setAudioUrl(url);
+          setHasPendingTranscription(true);
+        };
+        
+        mediaRecorderRef.current = mediaRecorder;
+        mediaRecorder.start();
+
         isRecordingRef.current = true;
         recognitionRef.current.start();
         setRecording(true);
@@ -150,7 +175,55 @@ export default function Studio() {
     <Header />
     <section className="studio-hero container"><div><p className="eyebrow">The story studio · 04</p><h1>Keep the voice.<br /><em>Find the thread.</em></h1><p className="studio-hero-description">Bring a voice note or a memory in your own words. We’ll help you turn the raw telling into something you can return to.</p></div></section>
     <section className="container studio-workspace">
-      <div className="studio-input-panel"><div className="panel-topline"><div><p className="eyebrow">Step 01 · Bring the memory</p><h2>Start with a voice.</h2></div><span className="mocked-badge"><Sparkles size={12} /> AI processing</span></div><div className="record-row"><button className={recording ? "record-button is-recording" : "record-button"} onClick={toggleRecording}><Mic size={18} />{recording ? "Stop recording" : "Record a memory"}</button><span>or write it below</span></div><label className="studio-textarea-label"><span className="sr-only">Your memory</span><textarea value={memory + interimMemory} onChange={(event) => { setMemory(event.target.value); setInterimMemory(""); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} /></label><div className="studio-input-footer"><label className="dialect-field" style={{ marginLeft: "auto" }}>Dialect<select value={dialect} onChange={(event) => setDialect(event.target.value)}><option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option></select></label></div><button className="button studio-process-button" onClick={processStory} disabled={!(memory + interimMemory).trim() || isProcessing}><WandSparkles size={16} />{isProcessing ? "Translating..." : "Transcribe this memory"}</button></div>
+      <div className="studio-input-panel">
+        <div className="panel-topline">
+          <div><p className="eyebrow">Step 01 · Bring the memory</p><h2>Start with a voice.</h2></div>
+          <span className="mocked-badge"><Sparkles size={12} /> AI processing</span>
+        </div>
+        
+        <div className="record-row">
+          <button className={recording ? "record-button is-recording" : "record-button"} onClick={toggleRecording}>
+            <Mic size={18} />{recording ? "Stop recording" : "Record a voice note"}
+          </button>
+          <span>or write it below</span>
+        </div>
+
+        {audioUrl && (
+          <div className="audio-player-container" style={{ marginBottom: "16px", marginTop: "16px", padding: "16px", background: "var(--background-secondary)", borderRadius: "12px", border: "1px solid var(--border)" }}>
+            <p className="eyebrow" style={{ marginBottom: "12px", color: "var(--text-secondary)" }}>Recorded Voice Note</p>
+            <audio controls src={audioUrl} style={{ width: "100%", height: "40px" }} />
+            {hasPendingTranscription && (
+              <button 
+                className="button" 
+                onClick={() => {
+                  setMemory(prev => prev + (prev ? " " : "") + hiddenTranscriptRef.current);
+                  setHasPendingTranscription(false);
+                }}
+                style={{ marginTop: "12px", width: "100%", background: "var(--text)", color: "var(--background)", display: "flex", justifyContent: "center", gap: "8px" }}
+              >
+                <Sparkles size={16} /> Transcribe Audio to Text
+              </button>
+            )}
+          </div>
+        )}
+
+        <label className="studio-textarea-label">
+          <span className="sr-only">Your memory</span>
+          <textarea value={memory} onChange={(event) => { setMemory(event.target.value); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} />
+        </label>
+        
+        <div className="studio-input-footer">
+          <label className="dialect-field" style={{ marginLeft: "auto" }}>Dialect
+            <select value={dialect} onChange={(event) => setDialect(event.target.value)}>
+              <option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option>
+            </select>
+          </label>
+        </div>
+        
+        <button className="button studio-process-button" onClick={processStory} disabled={!memory.trim() || isProcessing}>
+          <WandSparkles size={16} />{isProcessing ? "Translating..." : "Process & Translate"}
+        </button>
+      </div>
       <div className="studio-output-panel">
         <div className="panel-topline">
           <div><p className="eyebrow">Step 02 · Hold the thread</p><h2>Your story, clearer.</h2></div>
