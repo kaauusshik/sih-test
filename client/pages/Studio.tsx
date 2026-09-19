@@ -116,15 +116,17 @@ export default function Studio() {
       if (code === "en") {
         result = memory; // No translation needed
       } else {
-        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(memory)}&langpair=en|${code}`;
+        // Using Google Translate's public endpoint for client-side translation without a backend
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${code}&dt=t&q=${encodeURIComponent(memory)}`;
         const res = await fetch(url);
         const data = await res.json();
         
-        if (data && data.responseData && data.responseData.translatedText) {
-          result = data.responseData.translatedText;
+        if (data && data[0]) {
+          result = data[0].map((item: any) => item[0]).join('');
         }
       }
     } catch (e) {
+      console.error("Translation error:", e);
       result = `[Translation Failed] ${memory}`;
     }
     
