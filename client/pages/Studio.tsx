@@ -9,6 +9,7 @@ export default function Studio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [memory, setMemory] = useState("");
   const [dialect, setDialect] = useState("English");
+  const [sourceLang, setSourceLang] = useState("English");
   const [recording, setRecording] = useState(false);
   const [processed, setProcessed] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -148,13 +149,14 @@ export default function Studio() {
     };
     
     try {
-      const code = langCodes[dialect] || "en";
+      const sourceCode = sourceLang === "Hinglish" ? "hi" : "en";
+      const targetCode = langCodes[dialect] || "en";
       
-      if (code === "en") {
+      if (sourceCode === "en" && targetCode === "en") {
         result = memory; // No translation needed
       } else {
         // Using Google Translate's public endpoint for client-side translation without a backend
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${code}&dt=t&q=${encodeURIComponent(memory)}`;
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceCode}&tl=${targetCode}&dt=t&q=${encodeURIComponent(memory)}`;
         const res = await fetch(url);
         const data = await res.json();
         
@@ -225,8 +227,14 @@ export default function Studio() {
           <textarea value={memory} onChange={(event) => { setMemory(event.target.value); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} />
         </label>
         
-        <div className="studio-input-footer">
-          <label className="dialect-field" style={{ marginLeft: "auto" }}>Dialect
+        <div className="studio-input-footer" style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+          <label className="dialect-field">Source
+            <select value={sourceLang} onChange={(event) => setSourceLang(event.target.value)}>
+              <option>English</option>
+              <option>Hinglish</option>
+            </select>
+          </label>
+          <label className="dialect-field">Target
             <select value={dialect} onChange={(event) => setDialect(event.target.value)}>
               <option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option>
             </select>
