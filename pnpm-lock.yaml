@@ -17,6 +17,12 @@ importers:
       firebase:
         specifier: ^12.19.0
         version: 12.19.0
+      google-translate-api-x:
+        specifier: ^10.7.3
+        version: 10.7.3
+      translate:
+        specifier: ^3.1.0
+        version: 3.1.0
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -2415,6 +2421,10 @@ packages:
   glsl-noise@0.0.0:
     resolution: {integrity: sha512-b/ZCF6amfAUb7dJM/MxRs7AetQEahYzJ8PtgfrmEdtw6uyGOr+ZSGtgjFm6mfsBkxJ4d2W7kg+Nlqzqvn3Bc0w==}
 
+  google-translate-api-x@10.7.3:
+    resolution: {integrity: sha512-UCLhGMyzUiQQJuUjw6KM4scl4WJjMq5kYbq3eqLHB0KB96XBQ+VV7L/NUpJ9eMfVxXswXxA6xWhAX1h1OdDLZg==}
+    engines: {node: '>=21.0.0'}
+
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
@@ -3093,6 +3103,9 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
+
+  translate@3.1.0:
+    resolution: {integrity: sha512-X0KKY1Zl9vXZAUj+jyjQox4NIeryAEKBZymtjEuA6jLIyKtAlAJGfdw2+W1PRMkyHydGMHFIkMyxv4kUxEvgBw==}
 
   troika-three-text@0.52.4:
     resolution: {integrity: sha512-V50EwcYGruV5rUZ9F4aNsrytGdKcXKALjEtQXIOBfhVoZU9VAqZNIoGQ3TMiooVqFAbR1w15T+f+8gkzoFzawg==}
@@ -5507,6 +5520,8 @@ snapshots:
 
   glsl-noise@0.0.0: {}
 
+  google-translate-api-x@10.7.3: {}
+
   gopd@1.2.0: {}
 
   graceful-fs@4.2.11: {}
@@ -6125,6 +6140,8 @@ snapshots:
   tinyrainbow@3.1.0: {}
 
   toidentifier@1.0.1: {}
+
+  translate@3.1.0: {}
 
   troika-three-text@0.52.4(three@0.185.1):
     dependencies:
