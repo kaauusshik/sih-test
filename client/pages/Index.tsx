@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowDown, ArrowRight, ArrowUpRight, BookOpen, Camera, Headphones, LogIn, Mail, Menu, Mic, Quote, Search, Sparkles, X } from "lucide-react";
@@ -196,26 +197,7 @@ export default function Index() {
 
   return (
     <main className="site-shell">
-      <header className="site-header">
-        <div className="container header-inner">
-          <a className="wordmark" href="#begin" onClick={closeMenu}><Mark /> <span>VIRASYA</span></a>
-          <nav id="primary-navigation" className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Primary navigation">
-            <Link to="/stories" onClick={closeMenu}>Explore stories</Link>
-            <Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link>
-            <Link to="/studio" onClick={closeMenu}>AI story studio</Link>
-            <Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>
-            {user ? (
-              <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link>
-            ) : (
-              <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>
-            )}
-            <Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story <ArrowUpRight size={14} /></Link>
-          </nav>
-          <button className="menu-toggle" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen} aria-controls="primary-navigation">
-            {menuOpen ? <X size={19} /> : <Menu size={19} />}
-          </button>
-        </div>
-      </header>
+      <Header />
 
       <div className="progress-rail" aria-label="Page sections">
         {sections.map((section) => <a key={section.id} className={active === section.id ? "active" : ""} href={`#${section.id}`}><span className="rail-dot" /><span>{section.label}</span></a>)}

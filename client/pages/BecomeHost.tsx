@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { FormEvent, useState, useEffect } from "react";
 import { ArrowRight, CircleHelp, FileAudio, LogIn, Mail, Menu, Search, X, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -84,24 +85,7 @@ export default function BecomeHost() {
 
   return (
     <main className="site-shell preserve-page">
-      <header className="site-header">
-        <div className="container header-inner">
-          <Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link>
-          <nav className={menuOpen ? "main-nav is-open" : "main-nav"}>
-            <Link to="/stories" onClick={closeMenu}>Explore stories</Link>
-            <Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link>
-            <Link to="/studio" onClick={closeMenu}>AI story studio</Link>
-            <Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>
-            {user ? (
-              <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link>
-            ) : (
-              <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>
-            )}
-            <Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story <ArrowRight size={14} /></Link>
-          </nav>
-          <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button>
-        </div>
-      </header>
+      <Header />
 
       <section className="preserve-hero container">
         <div className="preserve-hero-copy">

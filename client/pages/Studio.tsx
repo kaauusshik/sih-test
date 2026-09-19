@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { useState, useEffect, useRef } from "react";
 import { AudioLines, Languages, LogIn, Mail, Menu, Mic, Search, Sparkles, WandSparkles, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -87,7 +88,7 @@ export default function Studio() {
       recognitionRef.current.stop();
       setRecording(false);
     } else {
-      if (memory === sampleMemory) setMemory("");
+
       try {
         isRecordingRef.current = true;
         recognitionRef.current.start();
@@ -129,7 +130,7 @@ export default function Studio() {
     setIsProcessing(false);
   };
   return <main className="site-shell studio-page">
-    <header className="site-header"><div className="container header-inner"><Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link><nav className={menuOpen ? "main-nav is-open" : "main-nav"}><Link to="/stories" onClick={closeMenu}>Explore stories</Link><Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link><Link className="nav-link-active" to="/studio" aria-current="page" onClick={closeMenu}>AI story studio</Link><Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>{user ? <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link> : <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>}<Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story ↗</Link></nav><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></header>
+    <Header />
     <section className="studio-hero container"><div><p className="eyebrow">The story studio · 04</p><h1>Keep the voice.<br /><em>Find the thread.</em></h1><p className="studio-hero-description">Bring a voice note or a memory in your own words. We’ll help you turn the raw telling into something you can return to.</p></div></section>
     <section className="container studio-workspace">
       <div className="studio-input-panel"><div className="panel-topline"><div><p className="eyebrow">Step 01 · Bring the memory</p><h2>Start with a voice.</h2></div><span className="mocked-badge"><Sparkles size={12} /> AI processing</span></div><div className="record-row"><button className={recording ? "record-button is-recording" : "record-button"} onClick={toggleRecording}><Mic size={18} />{recording ? "Stop recording" : "Record a memory"}</button><span>or write it below</span></div><label className="studio-textarea-label"><span className="sr-only">Your memory</span><textarea value={memory + interimMemory} onChange={(event) => { setMemory(event.target.value); setInterimMemory(""); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} /></label><div className="studio-input-footer"><label className="dialect-field" style={{ marginLeft: "auto" }}>Dialect<select value={dialect} onChange={(event) => setDialect(event.target.value)}><option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option></select></label></div><button className="button studio-process-button" onClick={processStory} disabled={!(memory + interimMemory).trim() || isProcessing}><WandSparkles size={16} />{isProcessing ? "Translating..." : "Transcribe this memory"}</button></div>

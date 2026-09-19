@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { FormEvent, useState } from "react";
 import { ArrowRight, CircleHelp, FileAudio, ImagePlus, LogIn, Mail, Menu, Search, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,10 +35,11 @@ export default function Preserve() {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email") || "");
+    const category = String(form.get("category") || "Community Archive");
     const submission = {
       id: Date.now(),
       title: String(form.get("title")),
-      category: "Community Archive",
+      category: category,
       image: thumbnailData || "https://images.unsplash.com/photo-1605335028442-f04523c02d18?auto=format&fit=crop&w=1200&q=85",
       region: String(form.get("region")),
       duration: "3 min",
@@ -76,24 +78,7 @@ export default function Preserve() {
 
   return (
     <main className="site-shell preserve-page">
-      <header className="site-header">
-        <div className="container header-inner">
-          <Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link>
-          <nav className={menuOpen ? "main-nav is-open" : "main-nav"}>
-            <Link to="/stories" onClick={closeMenu}>Explore stories</Link>
-            <Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link>
-            <Link to="/studio" onClick={closeMenu}>AI story studio</Link>
-            <Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>
-            {user ? (
-              <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link>
-            ) : (
-              <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>
-            )}
-            <Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story <ArrowRight size={14} /></Link>
-          </nav>
-          <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button>
-        </div>
-      </header>
+      <Header />
 
       <section className="preserve-hero container">
         <div className="preserve-hero-copy">
@@ -140,7 +125,8 @@ export default function Preserve() {
             <label className="form-field">Story title<input name="title" required placeholder="The summer the river came" defaultValue="Grandmother's Khichdi" /></label>
             <label className="form-field">Who carries this story?<input name="storyteller" required placeholder="Your name or their name" defaultValue="Nirmala Devi" /></label>
             <label className="form-field">Where is it from?<input name="region" required placeholder="Town, region, or home" defaultValue="Puri, Odisha" /></label>
-            <label className="form-field">Your email <small>(optional)</small><input name="email" type="email" placeholder="So we can follow up" defaultValue="demo@virasya.org" /></label>
+            <label className="form-field">Category<select name="category" required defaultValue="Food heritage"><option value="Oral history">Oral history</option><option value="Craft & song">Craft & song</option><option value="Folklore">Folklore</option><option value="Food heritage">Food heritage</option></select></label>
+            <label className="form-field" style={{ gridColumn: '1 / -1' }}>Your email <small>(optional)</small><input name="email" type="email" placeholder="So we can follow up" defaultValue="demo@virasya.org" /></label>
           </div>
           <label className="form-field story-field">The story <small>Write it how you remember it</small><textarea name="story" required rows={8} placeholder="My grandmother used to say..." defaultValue="My grandmother used to say that every recipe begins with a story. When the monsoon came, she would make a pot of khichdi and call every neighbour home. The scent of roasted cumin and ghee would fill the courtyard, a signal that the rains were here to stay. This isn't just a recipe; it's the memory of a house that was always open to everyone." /></label>
           <div className="form-grid" style={{ marginTop: '1.5rem' }}>

@@ -1,9 +1,10 @@
+import Header from "@/components/Header";
 import { useMemo, useState } from "react";
 import { Bookmark, Clock3, LogIn, Mail, MapPin, Menu, Play, Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const stories = [
-  { id: 1, category: "Oral history", image: "https://images.unsplash.com/photo-1649074705058-9d1579429e37?auto=format&fit=crop&w=1200&q=85", region: "Puri, Odisha", duration: "08 min", title: "Rath Yatra Memories", excerpt: "Every monsoon, the lanes around our home became a river of bells, colour, and names we still carry.", language: "Odia · 2026", featured: true },
+  { id: 1, category: "Oral history", image: "/rath-yatra.jpg", region: "Puri, Odisha", duration: "08 min", title: "Rath Yatra Memories", excerpt: "Every monsoon, the lanes around our home became a river of bells, colour, and names we still carry.", language: "Odia · 2026", featured: true },
   { id: 2, category: "Craft & song", image: "https://images.unsplash.com/photo-1712210332599-0cb76e647e43?auto=format&fit=crop&w=1200&q=85", region: "Kutch, Gujarat", duration: "12 min", title: "The Weaver's Song", excerpt: "The loom keeps time. My grandmother's song keeps the pattern from disappearing.", language: "Gujarati · 2025" },
   { id: 3, category: "Folklore", image: "https://images.pexels.com/photos/16543272/pexels-photo-16543272.jpeg?auto=compress&cs=tinysrgb&w=1200", region: "Jaisalmer, Rajasthan", duration: "06 min", title: "Under the Ber Tree", excerpt: "At dusk, the children gathered beneath the old tree, waiting for the story that knew their names.", language: "Hindi · 2024" },
   { id: 4, category: "Food heritage", image: "https://images.unsplash.com/photo-1610192770281-9b1d9bf5b31d?auto=format&fit=crop&w=1200&q=85", region: "Chettinad, TN", duration: "14 min", title: "Spice & Memory", excerpt: "The grinding stone in our courtyard holds the echoes of three generations of women making the perfect masala.", language: "Tamil · 2026" },
@@ -43,7 +44,7 @@ export default function Stories() {
   }), [category, query, allStories]);
 
   return <main className="site-shell stories-page">
-    <header className="site-header"><div className="container header-inner"><Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link><nav className={menuOpen ? "main-nav is-open" : "main-nav"}><Link className="nav-link-active" to="/stories" aria-current="page" onClick={closeMenu}>Explore stories</Link><Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link><Link to="/studio" onClick={closeMenu}>AI story studio</Link><Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>{user ? <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link> : <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>}<Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story ↗</Link></nav><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></header>
+    <Header />
 
     <section className="stories-hero container"><div><p className="eyebrow">The archive · 01</p><h1>Stories that<br /><em>stay with you.</em></h1><p className="stories-hero-description">Oral histories, songs, recipes, and small acts of remembrance — shared by the people who carry them.</p></div></section>
 

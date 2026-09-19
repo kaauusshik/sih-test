@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { useState } from "react";
 import { ArrowRight, Bookmark, LogIn, LogOut, Mail, Menu, Search, Sparkles, UserRound, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -62,7 +63,7 @@ export default function Dashboard() {
   if (!user) {
     return (
       <main className="site-shell profile-page">
-        <header className="site-header"><div className="container header-inner"><Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link><nav id="profile-navigation" className={menuOpen ? "main-nav is-open" : "main-nav"} aria-label="Primary navigation"><Link to="/stories" onClick={closeMenu}>Explore stories</Link><Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link><Link to="/studio" onClick={closeMenu}>AI story studio</Link><Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link><Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story <ArrowRight size={14} /></Link></nav><button className="menu-toggle" type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen} aria-controls="profile-navigation">{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></header>
+        <Header />
 
         <section className="container profile-empty" style={{ minHeight: "70vh" }}>
           <UserRound size={28} />
