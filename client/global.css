@@ -4,19 +4,19 @@
 @config "../tailwind.config.ts";
 
 :root {
-  --background: 28 25% 7%;
-  --foreground: 36 37% 90%;
-  --card: 27 24% 11%;
-  --card-foreground: 36 37% 90%;
-  --border: 32 18% 23%;
-  --muted: 27 20% 15%;
-  --muted-foreground: 34 15% 63%;
-  --primary: 40 61% 56%;
-  --primary-foreground: 28 25% 7%;
-  --accent: 13 53% 54%;
-  --accent-foreground: 36 37% 90%;
-  --ring: 40 61% 56%;
-  --radius: 0.25rem;
+  --background: 240 10% 4%;
+  --foreground: 40 30% 96%;
+  --card: 240 5% 8%;
+  --card-foreground: 40 30% 96%;
+  --border: 240 5% 16%;
+  --muted: 240 5% 12%;
+  --muted-foreground: 30 10% 60%;
+  --primary: 43 65% 55%;
+  --primary-foreground: 240 10% 4%;
+  --accent: 15 55% 50%;
+  --accent-foreground: 40 30% 96%;
+  --ring: 43 65% 55%;
+  --radius: 0.35rem;
 }
 
 @layer base {
@@ -27,7 +27,7 @@
   button { font: inherit; }
 }
 
-:root { --ink: #18130f; --cream: #f0e4d0; --dim: #b6a58e; --gold: #c9a66b; --coral: #a9785b; --rust: #3b2a20; --line: rgba(240, 228, 208, .14); }
+:root { --ink: #080605; --cream: #faf5ec; --dim: #a69b91; --gold: #d8b26e; --coral: #c06c4b; --rust: #2e1d15; --line: rgba(250, 245, 236, .09); }
 * { box-sizing: border-box; }
 .site-shell { background: var(--ink); overflow: hidden; }
 @keyframes text-fade-up { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
