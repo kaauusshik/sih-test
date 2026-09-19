@@ -235,43 +235,13 @@ export default function Index() {
             <Eyebrow>A living archive</Eyebrow>
             <h2>Time moved.<br /><em>The memories stayed.</em></h2>
             <p>We grew up, studied, moved away, met new people. But somewhere inside her stories were always there.</p>
-            <SectionCue href="#archive">Remember</SectionCue>
+            <Link className="button" to="/stories" style={{ marginTop: 12, width: 'fit-content' }}>Explore stories <ArrowRight size={16} /></Link>
           </div>
         </div>
       </section>
 
-      <section className="archive section-rule" id="archive">
-        <div className="container archive-inner">
-          <div className="archive-intro">
-            <div className="archive-icon"><Mic size={22} strokeWidth={1.2} /></div>
-            <Eyebrow>From voice to living heritage.</Eyebrow>
-            <h2>A story,<br /><em>held with care.</em></h2>
-            <p>Your story is transcribed, translated, and preserved — with its context, place, and people.</p>
-            <a className="button" href="/preserve">Open the story studio <ArrowRight size={16} /></a>
-          </div>
-          <div className="process">
-            {[{ number: "01", icon: Mic, label: "Voice" }, { number: "02", icon: Quote, label: "Transcript" }, { number: "03", icon: Sparkles, label: "Context" }].map(({ number, icon: Icon, label }) => <div className="process-step" key={number}><span className="process-number">{number}</span><div className="process-icon"><Icon size={22} strokeWidth={1.2} /></div><span>{label}</span></div>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="explore-promo section-rule" id="explore">
-        <div className="container split-section">
-          <div className="section-copy">
-            <Eyebrow>Discover the archive</Eyebrow>
-            <h2>Uncover<br /><em>living history.</em></h2>
-            <p>Dive into a growing collection of cultural artifacts, folklore, and memories preserved by the community.</p>
-            <Link className="button" to="/stories">Explore stories <ArrowRight size={16} /></Link>
-          </div>
-          <div className="memory-art archive-hero-art">
-            <img src="https://images.unsplash.com/photo-1601758177266-bc599de87707?auto=format&fit=crop&w=800&q=80" alt="Ancient journal glowing with stories" className="memory-art-image" style={{ objectFit: 'cover' }} />
-          </div>
-        </div>
-      </section>
 
       <CultureCatalog />
-
-      <ProfileSection />
 
       <section className="final-cta" id="preserve">
         <div className="container cta-inner">

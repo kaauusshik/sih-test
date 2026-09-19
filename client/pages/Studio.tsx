@@ -112,14 +112,17 @@ export default function Studio() {
     
     try {
       const code = langCodes[dialect] || "en";
-      const res = await fetch("/api/translate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: memory, lang: code })
-      });
-      const data = await res.json();
-      if (data && data.translatedText) {
-        result = data.translatedText;
+      
+      if (code === "en") {
+        result = memory; // No translation needed
+      } else {
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(memory)}&langpair=en|${code}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (data && data.responseData && data.responseData.translatedText) {
+          result = data.responseData.translatedText;
+        }
       }
     } catch (e) {
       result = `[Translation Failed] ${memory}`;

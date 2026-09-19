@@ -10,7 +10,7 @@ export const handleTranslate: RequestHandler = async (req, res) => {
   }
 
   try {
-    const result = await translate(text, { to: lang });
+    const result = await translate(text, { to: lang }) as any;
     res.json({ translatedText: result.text });
   } catch (error) {
     console.error("Translation error:", error);

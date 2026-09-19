@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Search, LogIn, Menu, X, Sun, Moon, ArrowRight } from "lucide-react";
+import { Search, LogIn, Menu, X, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 
 function Mark() {
@@ -18,7 +18,6 @@ export default function Header() {
   const closeMenu = () => setMenuOpen(false);
 
   const [user, setUser] = useState<{ name: string; email: string; avatar?: string } | null>(null);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
     try {
@@ -27,29 +26,10 @@ export default function Header() {
     } catch {
       setUser(null);
     }
-
-    const storedTheme = localStorage.getItem("virasya-theme") as "dark" | "light" | null;
-    if (storedTheme === "light") {
-      setTheme("light");
-      document.documentElement.classList.add("light-theme");
-    } else {
-      setTheme("dark");
-      document.documentElement.classList.remove("light-theme");
-    }
+    // Ensure dark mode is always active (toggle was removed)
+    document.documentElement.classList.remove("light-theme");
+    localStorage.removeItem("virasya-theme");
   }, []);
-
-  const toggleTheme = () => {
-    setTheme(prev => {
-      const newTheme = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("virasya-theme", newTheme);
-      if (newTheme === "light") {
-        document.documentElement.classList.add("light-theme");
-      } else {
-        document.documentElement.classList.remove("light-theme");
-      }
-      return newTheme;
-    });
-  };
 
   const isStories = location.pathname === "/stories";
   const isHosts = location.pathname === "/hosts";
@@ -72,10 +52,6 @@ export default function Header() {
           <Link className={isStudio ? "nav-link-active" : ""} to="/studio" onClick={closeMenu}>
             AI story studio
           </Link>
-          
-          <button className="header-icon-button" onClick={toggleTheme} aria-label="Toggle theme" title="Toggle theme">
-            {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
           
           <Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search">
             <Search size={16} />

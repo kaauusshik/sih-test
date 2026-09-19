@@ -52,6 +52,20 @@ export default function Dashboard() {
       return 9;
     }
   });
+
+  const [customStories, setCustomStories] = useState<any[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("virasaya-custom-stories") || "[]");
+    } catch {
+      return [];
+    }
+  });
+
+  const handleDeleteCustomStory = (id: number) => {
+    const updated = customStories.filter(s => s.id !== id);
+    setCustomStories(updated);
+    localStorage.setItem("virasaya-custom-stories", JSON.stringify(updated));
+  };
   const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = () => {
@@ -203,6 +217,19 @@ export default function Dashboard() {
       </div>
       
       <div className="dashboard-archives-list">
+        {customStories.map((story) => (
+          <div className="archive-item" key={story.id}>
+            <div className="archive-icon"><Bookmark size={16} /></div>
+            <div className="archive-info">
+              <h4>{story.title}</h4>
+              <p>Preserved by you · {story.category}</p>
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button className="button button-small" onClick={() => navigate('/stories')}>View</button>
+              <button className="button button-small button-outline" onClick={() => handleDeleteCustomStory(story.id)}>Delete</button>
+            </div>
+          </div>
+        ))}
         {archivesMock.map((archive) => (
           <div className="archive-item" key={archive.id}>
             <div className="archive-icon"><Bookmark size={16} /></div>
