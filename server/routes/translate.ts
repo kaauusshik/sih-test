@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import translate from "google-translate-api-x";
 
 export const handleTranslate: RequestHandler = async (req, res) => {
   const { text, lang } = req.body;
@@ -9,16 +10,8 @@ export const handleTranslate: RequestHandler = async (req, res) => {
   }
 
   try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${lang}&dt=t&q=${encodeURIComponent(text)}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (data && data[0]) {
-      const result = data[0].map((s: any) => s[0]).join('');
-      res.json({ translatedText: result });
-    } else {
-      res.status(500).json({ error: "Failed to parse translation" });
-    }
+    const result = await translate(text, { to: lang });
+    res.json({ translatedText: result.text });
   } catch (error) {
     console.error("Translation error:", error);
     res.status(500).json({ error: "Translation failed" });

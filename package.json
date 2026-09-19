@@ -16,6 +16,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "firebase": "^12.19.0",
+    "google-translate-api-x": "^10.7.3",
+    "translate": "^3.1.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

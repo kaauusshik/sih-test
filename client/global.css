@@ -59,6 +59,66 @@
   --rust: #ebdfd3;
 }
 
+.light-theme .story-card, 
+.light-theme .host-card,
+.light-theme .studio-input-panel, 
+.light-theme .studio-output-panel,
+.light-theme .profile-card,
+.light-theme .archive-item,
+.light-theme .login-card,
+.light-theme .culture-category-card,
+.light-theme .voice-card {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.1) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.light-theme .culture-catalog,
+.light-theme .profile-preview,
+.light-theme .profile-hero,
+.light-theme .login-section,
+.light-theme .hosts-hero, 
+.light-theme .studio-hero, 
+.light-theme .preserve-hero,
+.light-theme .hero,
+.light-theme .voices,
+.light-theme .memory,
+.light-theme .studio,
+.light-theme .final-cta,
+.light-theme .site-footer {
+  background: var(--ink) !important;
+}
+
+.light-theme .map-node {
+  background: #ffffff !important;
+  border-color: var(--gold) !important;
+}
+
+.light-theme .portrait-panel {
+  background: var(--ink) !important;
+}
+
+.light-theme .form-field input, 
+.light-theme .form-field textarea, 
+.light-theme .form-field select,
+.light-theme .search-wrap input,
+.light-theme .dialect-field select,
+.light-theme .studio-textarea-label textarea {
+  background: #ffffff !important;
+  color: var(--cream) !important;
+  border-color: rgba(0,0,0,0.2) !important;
+}
+
+.light-theme.studio-page, .light-theme .studio-page {
+  --ink: #faf5ec !important;
+  --cream: #12100e !important;
+  --dim: #7a7065 !important;
+  --line: rgba(8, 6, 5, 0.1) !important;
+  --rust: #ebdfd3 !important;
+  background: var(--ink) !important;
+  color: var(--cream) !important;
+}
+
 * { box-sizing: border-box; transition: background-color 0.3s ease, border-color 0.3s ease; }
 .site-shell { background: var(--ink); color: var(--cream); overflow: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
 @keyframes text-fade-up { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
