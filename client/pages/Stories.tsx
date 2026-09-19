@@ -23,15 +23,24 @@ export default function Stories() {
   const [category, setCategory] = useState("All stories");
   const [saved, setSaved] = useState<number[]>([]);
   const [playing, setPlaying] = useState<number | null>(null);
+  const [selectedStory, setSelectedStory] = useState<any | null>(null);
   const [user] = useState<{ name: string; email: string; avatar?: string } | null>(() => {
     try { return JSON.parse(localStorage.getItem("virasya-user") || "null"); } catch { return null; }
   });
+  const allStories = useMemo(() => {
+    try {
+      const custom = JSON.parse(localStorage.getItem("virasaya-custom-stories") || "[]");
+      return [...custom, ...stories];
+    } catch {
+      return stories;
+    }
+  }, []);
   const closeMenu = () => setMenuOpen(false);
-  const visibleStories = useMemo(() => stories.filter((story) => {
+  const visibleStories = useMemo(() => allStories.filter((story) => {
     const matchesCategory = category === "All stories" || story.category === category;
     const text = `${story.title} ${story.region} ${story.category} ${story.excerpt}`.toLowerCase();
     return matchesCategory && text.includes(query.toLowerCase());
-  }), [category, query]);
+  }), [category, query, allStories]);
 
   return <main className="site-shell stories-page">
     <header className="site-header"><div className="container header-inner"><Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link><nav className={menuOpen ? "main-nav is-open" : "main-nav"}><Link className="nav-link-active" to="/stories" aria-current="page" onClick={closeMenu}>Explore stories</Link><Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link><Link to="/studio" onClick={closeMenu}>AI story studio</Link><Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>{user ? <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link> : <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>}<Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story ↗</Link></nav><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></header>
@@ -39,8 +48,28 @@ export default function Stories() {
     <section className="stories-hero container"><div><p className="eyebrow">The archive · 01</p><h1>Stories that<br /><em>stay with you.</em></h1><p className="stories-hero-description">Oral histories, songs, recipes, and small acts of remembrance — shared by the people who carry them.</p></div></section>
 
     <section className="container stories-explorer"><div className="explorer-toolbar"><label className="search-wrap"><Search size={16} /><span className="sr-only">Search stories</span><input aria-label="Search stories" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search a place, person, or tradition" /></label><div className="filter-pills" role="group" aria-label="Filter stories by tradition">{categories.map((item) => <button key={item} className={category === item ? "filter-pill filter-pill-active" : "filter-pill"} aria-pressed={category === item} onClick={() => setCategory(item)}>{item}</button>)}</div></div><div className="stories-status-row">{visibleStories.length} {visibleStories.length === 1 ? "story" : "stories"} in the collection</div>
-      {visibleStories.length ? <div className="stories-grid">{visibleStories.map((story) => <article className={story.featured ? "story-card story-card-featured" : "story-card"} key={story.id}><div className="story-card-image" style={{ backgroundImage: `url(${story.image})` }}><span className="story-badge">{story.category}</span><button className={playing === story.id ? "play-button is-playing" : "play-button"} aria-label={`Play ${story.title}`} onClick={() => setPlaying(playing === story.id ? null : story.id)}><Play size={15} fill="currentColor" /></button></div><div className="story-card-content"><div className="story-metadata"><span><MapPin size={13} />{story.region}</span><span><Clock3 size={13} />{story.duration}</span></div><h2>{story.title}</h2><p>{story.excerpt}</p><div className="story-card-footer"><span>{story.language}</span><button className={saved.includes(story.id) ? "save-button is-saved" : "save-button"} aria-pressed={saved.includes(story.id)} onClick={() => setSaved(saved.includes(story.id) ? saved.filter((id) => id !== story.id) : [...saved, story.id])}><Bookmark size={15} fill={saved.includes(story.id) ? "currentColor" : "none"} />{saved.includes(story.id) ? "Saved" : "Save"}</button></div></div></article>)}</div> : <div className="stories-empty">No stories match that thread yet. Try another place, person, or tradition.</div>}
+      {visibleStories.length ? <div className="stories-grid">{visibleStories.map((story) => <article className={story.featured ? "story-card story-card-featured" : "story-card"} key={story.id} onClick={() => setSelectedStory(story)} style={{ cursor: 'pointer' }}><div className="story-card-image" style={{ backgroundImage: `url(${story.image})` }}><span className="story-badge">{story.category}</span><button className={playing === story.id ? "play-button is-playing" : "play-button"} aria-label={`Play ${story.title}`} onClick={(e) => { e.stopPropagation(); setPlaying(playing === story.id ? null : story.id); }}><Play size={15} fill="currentColor" /></button></div><div className="story-card-content"><div className="story-metadata"><span><MapPin size={13} />{story.region}</span><span><Clock3 size={13} />{story.duration}</span></div><h2>{story.title}</h2><p>{story.excerpt}</p><div className="story-card-footer"><span>{story.language}</span><button className={saved.includes(story.id) ? "save-button is-saved" : "save-button"} aria-pressed={saved.includes(story.id)} onClick={(e) => { e.stopPropagation(); setSaved(saved.includes(story.id) ? saved.filter((id) => id !== story.id) : [...saved, story.id]); }}><Bookmark size={15} fill={saved.includes(story.id) ? "currentColor" : "none"} />{saved.includes(story.id) ? "Saved" : "Save"}</button></div></div></article>)}</div> : <div className="stories-empty">No stories match that thread yet. Try another place, person, or tradition.</div>}
     </section>
+
+    {selectedStory && (
+      <div className="story-modal-overlay" onClick={() => setSelectedStory(null)}>
+        <div className="story-modal" onClick={e => e.stopPropagation()}>
+          <button className="story-modal-close" onClick={() => setSelectedStory(null)}><X size={20} /></button>
+          <img src={selectedStory.image} alt={selectedStory.title} className="story-modal-image" />
+          <div className="story-modal-content">
+            <div className="story-modal-meta">
+              <span><MapPin size={15} />{selectedStory.region}</span>
+              <span><Clock3 size={15} />{selectedStory.duration}</span>
+            </div>
+            <h2>{selectedStory.title}</h2>
+            <div className="story-modal-author">Shared by {selectedStory.storyteller || "Community member"}</div>
+            <div className="story-modal-body">
+              {selectedStory.story || selectedStory.excerpt}
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
 
     <section className="container stories-bottom-cta"><div><p className="eyebrow">Your turn to add a thread</p><h2>What story do<br /><em>you carry?</em></h2></div><Link className="button" to="/preserve">Preserve a story <span>→</span></Link></section>
     <footer className="site-footer">

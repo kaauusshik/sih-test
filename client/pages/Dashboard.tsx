@@ -39,10 +39,16 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [artifactCount] = useState(() => {
     try {
-      const counts = JSON.parse(localStorage.getItem("virasaya-culture-counts") || "{}") as Record<string, number>;
-      return Object.values(counts).reduce((total, count) => total + count, 0);
+      const stored = localStorage.getItem("virasaya-culture-counts");
+      const counts = stored ? JSON.parse(stored) : {
+        "oral-histories": 3,
+        "food-recipes": 2,
+        "traditional-crafts": 2,
+        "folklore": 2,
+      };
+      return Object.values(counts).reduce((total: any, count: any) => total + count, 0) as number;
     } catch {
-      return 0;
+      return 9;
     }
   });
   const closeMenu = () => setMenuOpen(false);

@@ -70,10 +70,17 @@ const cultureCategories = [
 function CultureCatalog() {
   const [counts, setCounts] = useState<Record<string, number>>(() => {
     try {
-      return JSON.parse(localStorage.getItem("virasaya-culture-counts") || "{}") as Record<string, number>;
+      const stored = localStorage.getItem("virasaya-culture-counts");
+      if (stored) return JSON.parse(stored) as Record<string, number>;
     } catch {
-      return {};
+      // ignore
     }
+    return {
+      "oral-histories": 3,
+      "food-recipes": 2,
+      "traditional-crafts": 2,
+      "folklore": 2,
+    };
   });
   const [activeCategory, setActiveCategory] = useState(cultureCategories[0].id);
   const totalArtifacts = Object.values(counts).reduce((total, count) => total + count, 0);
@@ -240,7 +247,7 @@ export default function Index() {
       <section className="memory section-rule" id="memory">
         <div className="container split-section reversed">
           <div className="memory-art">
-            <img src="https://images.unsplash.com/photo-1605335028442-f04523c02d18?auto=format&fit=crop&w=800&q=80" alt="Grandmother telling stories to grandchildren" className="memory-art-image" style={{ objectFit: 'cover' }} />
+            <img src="/grandmother-stories.jpg" alt="Grandmother telling stories to grandchildren" className="memory-art-image" style={{ objectFit: 'cover' }} />
           </div>
           <div className="section-copy">
             <Eyebrow>A living archive</Eyebrow>

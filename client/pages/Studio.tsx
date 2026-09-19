@@ -3,7 +3,6 @@ import { AudioLines, Languages, LogIn, Mail, Menu, Mic, Search, Sparkles, WandSp
 import { Link } from "react-router-dom";
 
 function Mark() { return <img className="brand-logo" src="https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2Fedc9c5030ad24ea5a6373f49e2efffc5?format=webp&width=800&height=1200" alt="VIRASYA" />; }
-const sampleMemory = "My grandmother used to say that every recipe begins with a story. When the monsoon came, she would make a pot of khichdi and call every neighbour home.";
 
 export default function Studio() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -105,71 +104,35 @@ export default function Studio() {
     setProcessed(false);
     
     let result = memory;
-    const isSample = memory.trim().toLowerCase() === sampleMemory.trim().toLowerCase();
-
-    const translations: Record<string, string> = {
-      Hindi: "मेरी दादी कहती थीं कि हर नुस्खा एक कहानी से शुरू होता है। जब मानसून आता था, तो वह खिचड़ी का एक बर्तन बनाती थी और हर पड़ोसी को घर बुलाती थी।",
-      Odia: "ମୋ ଜେଜେମା କହୁଥିଲେ ଯେ ପ୍ରତ୍ୟେକ ରେସିପି ଏକ କାହାଣୀରୁ ଆରମ୍ଭ ହୁଏ | ଯେତେବେଳେ ମୌସୁମୀ ଆସେ, ସେ ଏକ ହାଣ୍ଡି ଖେଚୁଡି ତିଆରି କରୁଥିଲେ ଏବଂ ପ୍ରତ୍ୟେକ ପଡ଼ୋଶୀଙ୍କୁ ଘରକୁ ଡାକୁଥିଲେ |",
-      Gujarati: "મારી દાદી કહેતા હતા કે દરેક રેસીપી વાર્તાથી શરૂ થાય છે. જ્યારે ચોમાસુ આવ્યું, ત્યારે તે ખીચડી બનાવતી અને દરેક પડોશીને ઘરે બોલાવતી.",
-      Tamil: "ஒவ்வொரு சமையல்குறிப்பும் ஒரு கதையுடன் தொடங்குகிறது என்று என் பாட்டி சொல்வார். மழைக்காலம் வந்ததும், அவர் ஒரு பானை கிச்சடி செய்து எல்லா அண்டை வீட்டாரையும் வீட்டிற்கு அழைப்பார்.",
-      Telugu: "ప్రతి వంటకం ఒక కథతో మొదలవుతుందని మా నానమ్మ చెప్పేది. వర్షాకాలం రాగానే, ఆవిడ ఒక కుండలో ఖిచ్డీ వండి పొరుగువారందరినీ ఇంటికి పిలిచేది.",
-      Kannada: "ಪ್ರತಿಯೊಂದು ಪಾಕವಿಧಾನವು ಒಂದು ಕಥೆಯೊಂದಿಗೆ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ ಎಂದು ನನ್ನ ಅಜ್ಜಿ ಹೇಳುತ್ತಿದ್ದರು. ಮುಂಗಾರು ಬಂದಾಗ, ಅವರು ಒಂದು ಮಡಕೆ ಕಿಚಡಿಯನ್ನು ಮಾಡಿ ಎಲ್ಲ ನೆರೆಹೊರೆಯವರನ್ನು ಮನೆಗೆ ಕರೆಯುತ್ತಿದ್ದರು.",
-      Malayalam: "ഓരോ പാചകക്കുറിപ്പും ഒരു കഥയോടെയാണ് ആരംഭിക്കുന്നതെന്ന് എൻ്റെ മുത്തശ്ശി പറയുമായിരുന്നു. മൺസൂൺ വന്നപ്പോൾ, അവൾ ഒരു പാത്രം കിച്ചടി ഉണ്ടാക്കി എല്ലാ അയൽക്കാരെയും വീട്ടിലേക്ക് വിളിക്കുമായിരുന്നു.",
-      Haryanvi: "मेरी दादी कह्या करै थी कै हर नुस्खा एक कहानी ते शुरू होवै सै। जब सावण आवै था, तो वा एक पतीली खिचड़ी बणावै थी अर सारे गुहांडियां नै घर बुलावै थी।",
-      Marathi: "माझी आजी म्हणायची की प्रत्येक रेसिपी एका कथेपासून सुरू होते. पावसाळा आला की ती एका भांड्यात खिचडी बनवायची आणि सर्व शेजाऱ्यांना घरी बोलवायची.",
-      Assamese: "মোৰ আইতাই কৈছিল যে প্ৰতিটো ৰেচিপি এটা কাহিনীৰে আৰম্ভ হয়। বাৰিষা আহিলে তাই এপাচি খিচিৰি বনাই সকলো ওচৰ-চুবুৰীয়াক ঘৰলৈ মাতিছিল।",
-      Urdu: "میری دادی کہتی تھیں کہ ہر ترکیب ایک کہانی سے شروع ہوتی ہے۔ جب مون سون آتا تو وہ ایک دیگچی کھچڑی بناتی اور ہر پڑوسی کو گھر بلاتی تھیں۔",
-    };
-
     const langCodes: Record<string, string> = {
-      Hindi: "hi", Odia: "or", Gujarati: "gu", Tamil: "ta", Telugu: "te",
+      English: "en", Hindi: "hi", Odia: "or", Gujarati: "gu", Tamil: "ta", Telugu: "te",
       Kannada: "kn", Malayalam: "ml", Haryanvi: "hi", Marathi: "mr", Assamese: "as", Urdu: "ur"
     };
-
-    if (dialect !== "English") {
-      if (isSample && translations[dialect]) {
-        result = translations[dialect];
-        setTimeout(() => {
-          setTranslatedText(result);
-          setProcessed(true);
-          setIsProcessing(false);
-        }, 1500);
-      } else {
-        try {
-          const code = langCodes[dialect] || "hi";
-          const res = await fetch("/api/translate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ text: memory, lang: code })
-          });
-          const data = await res.json();
-          if (data && data.translatedText) {
-            result = data.translatedText;
-          } else {
-            result = `[Translated to ${dialect}] ${memory}`;
-          }
-        } catch (e) {
-          result = `[Translated to ${dialect}] ${memory}`;
-        }
-        setTranslatedText(result);
-        setProcessed(true);
-        setIsProcessing(false);
+    
+    try {
+      const code = langCodes[dialect] || "en";
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: memory, lang: code })
+      });
+      const data = await res.json();
+      if (data && data.translatedText) {
+        result = data.translatedText;
       }
-    } else {
-      setTimeout(() => {
-        setTranslatedText(result);
-        setProcessed(true);
-        setIsProcessing(false);
-      }, 1000);
+    } catch (e) {
+      result = `[Translation Failed] ${memory}`;
     }
+    
+    setTranslatedText(result);
+    setProcessed(true);
+    setIsProcessing(false);
   };
   return <main className="site-shell studio-page">
     <header className="site-header"><div className="container header-inner"><Link className="wordmark" to="/" onClick={closeMenu}><Mark /><span>VIRASYA</span></Link><nav className={menuOpen ? "main-nav is-open" : "main-nav"}><Link to="/stories" onClick={closeMenu}>Explore stories</Link><Link to="/hosts" onClick={closeMenu}>Meet the hosts</Link><Link className="nav-link-active" to="/studio" aria-current="page" onClick={closeMenu}>AI story studio</Link><Link to="/search" className="header-icon-button" onClick={closeMenu} aria-label="Search"><Search size={16} /></Link>{user ? <Link to="/dashboard" className="header-user-button" onClick={closeMenu}><span className="header-user-avatar">{user.avatar ? <img src={user.avatar} className="header-user-avatar-image" alt="Profile" /> : user.name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2)}</span>{user.name.split(" ")[0]}</Link> : <Link to="/login" className="header-login-button" onClick={closeMenu}><LogIn size={14} strokeWidth={1.6} />Log in</Link>}<Link className="button button-small" to="/preserve" onClick={closeMenu}>Preserve a story ↗</Link></nav><button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen}>{menuOpen ? <X size={19} /> : <Menu size={19} />}</button></div></header>
     <section className="studio-hero container"><div><p className="eyebrow">The story studio · 04</p><h1>Keep the voice.<br /><em>Find the thread.</em></h1><p className="studio-hero-description">Bring a voice note or a memory in your own words. We’ll help you turn the raw telling into something you can return to.</p></div></section>
     <section className="container studio-workspace">
-      <div className="studio-input-panel"><div className="panel-topline"><div><p className="eyebrow">Step 01 · Bring the memory</p><h2>Start with a voice.</h2></div><span className="mocked-badge"><Sparkles size={12} /> AI processing</span></div><div className="record-row"><button className={recording ? "record-button is-recording" : "record-button"} onClick={toggleRecording}><Mic size={18} />{recording ? "Stop recording" : "Record a memory"}</button><span>or write it below</span></div><label className="studio-textarea-label"><span className="sr-only">Your memory</span><textarea value={memory + interimMemory} onChange={(event) => { setMemory(event.target.value); setInterimMemory(""); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} /></label><div className="studio-input-footer"><button className="text-button" onClick={() => { setMemory(sampleMemory); setInterimMemory(""); setProcessed(false); }}>Use a sample memory</button><label className="dialect-field">Dialect<select value={dialect} onChange={(event) => setDialect(event.target.value)}><option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option></select></label></div><button className="button studio-process-button" onClick={processStory} disabled={!(memory + interimMemory).trim() || isProcessing}><WandSparkles size={16} />{isProcessing ? "Translating..." : "Transcribe this memory"}</button></div>
+      <div className="studio-input-panel"><div className="panel-topline"><div><p className="eyebrow">Step 01 · Bring the memory</p><h2>Start with a voice.</h2></div><span className="mocked-badge"><Sparkles size={12} /> AI processing</span></div><div className="record-row"><button className={recording ? "record-button is-recording" : "record-button"} onClick={toggleRecording}><Mic size={18} />{recording ? "Stop recording" : "Record a memory"}</button><span>or write it below</span></div><label className="studio-textarea-label"><span className="sr-only">Your memory</span><textarea value={memory + interimMemory} onChange={(event) => { setMemory(event.target.value); setInterimMemory(""); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} /></label><div className="studio-input-footer"><label className="dialect-field" style={{ marginLeft: "auto" }}>Dialect<select value={dialect} onChange={(event) => setDialect(event.target.value)}><option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option></select></label></div><button className="button studio-process-button" onClick={processStory} disabled={!(memory + interimMemory).trim() || isProcessing}><WandSparkles size={16} />{isProcessing ? "Translating..." : "Transcribe this memory"}</button></div>
       <div className="studio-output-panel">
         <div className="panel-topline">
           <div><p className="eyebrow">Step 02 · Hold the thread</p><h2>Your story, clearer.</h2></div>

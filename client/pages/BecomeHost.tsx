@@ -57,18 +57,29 @@ export default function BecomeHost() {
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email") || "");
     const submission = {
-      title: String(form.get("title")),
-      storyteller: String(form.get("storyteller")),
+      name: String(form.get("name")),
+      heritage: String(form.get("heritage")),
       region: String(form.get("region")),
-      story: String(form.get("story")),
+      details: String(form.get("details")),
       email,
-      audio: fileName,
       submittedAt: new Date().toISOString(),
     };
-    localStorage.setItem("virasaya-preserve-submission", JSON.stringify(submission));
-    setFeedback("Your story has been placed in the archive. Thank you for carrying it forward.");
+    localStorage.setItem("virasaya-host-submission", JSON.stringify(submission));
+
+    // Update Artifacts Count for Homepage & Dashboard
+    const countsStr = localStorage.getItem("virasaya-culture-counts");
+    const counts = countsStr ? JSON.parse(countsStr) : {
+      "oral-histories": 3,
+      "food-recipes": 2,
+      "traditional-crafts": 2,
+      "folklore": 2,
+    };
+    counts["traditional-crafts"] = (counts["traditional-crafts"] || 0) + 1;
+    localStorage.setItem("virasaya-culture-counts", JSON.stringify(counts));
+
+    setFeedback("Your host application has been sent. Thank you for your interest in preserving heritage!");
     event.currentTarget.reset();
-    setFileName("");
+    setDetailsText("");
   }
 
   return (

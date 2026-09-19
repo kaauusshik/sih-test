@@ -1,37 +1,77 @@
 import { FormEvent, useState } from "react";
-import { ArrowRight, CircleHelp, FileAudio, LogIn, Mail, Menu, Search, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowRight, CircleHelp, FileAudio, ImagePlus, LogIn, Mail, Menu, Search, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Mark() {
   return <img className="brand-logo" src="https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2Fedc9c5030ad24ea5a6373f49e2efffc5?format=webp&width=800&height=1200" alt="VIRASYA" />;
 }
 
 export default function Preserve() {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [thumbnailName, setThumbnailName] = useState("");
+  const [thumbnailData, setThumbnailData] = useState<string | null>(null);
   const [feedback, setFeedback] = useState("");
   const [user] = useState<{ name: string; email: string; avatar?: string } | null>(() => {
     try { return JSON.parse(localStorage.getItem("virasya-user") || "null"); } catch { return null; }
   });
   const closeMenu = () => setMenuOpen(false);
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setThumbnailName(file.name);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailData(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email") || "");
     const submission = {
+      id: Date.now(),
       title: String(form.get("title")),
-      storyteller: String(form.get("storyteller")),
+      category: "Community Archive",
+      image: thumbnailData || "https://images.unsplash.com/photo-1605335028442-f04523c02d18?auto=format&fit=crop&w=1200&q=85",
       region: String(form.get("region")),
+      duration: "3 min",
+      excerpt: String(form.get("story")).substring(0, 100) + "...",
+      storyteller: String(form.get("storyteller")),
       story: String(form.get("story")),
       email,
       audio: fileName,
       submittedAt: new Date().toISOString(),
     };
+    
+    // Save to user profile (Dashboard)
     localStorage.setItem("virasaya-preserve-submission", JSON.stringify(submission));
-    setFeedback("Your story has been placed in the archive. Thank you for carrying it forward.");
-    event.currentTarget.reset();
-    setFileName("");
+    
+    // Append to global stories (Stories page)
+    const existing = JSON.parse(localStorage.getItem("virasaya-custom-stories") || "[]");
+    localStorage.setItem("virasaya-custom-stories", JSON.stringify([submission, ...existing]));
+
+    // Update Artifacts Count for Homepage & Dashboard
+    const countsStr = localStorage.getItem("virasaya-culture-counts");
+    const counts = countsStr ? JSON.parse(countsStr) : {
+      "oral-histories": 3,
+      "food-recipes": 2,
+      "traditional-crafts": 2,
+      "folklore": 2,
+    };
+    counts["oral-histories"] = (counts["oral-histories"] || 0) + 1;
+    localStorage.setItem("virasaya-culture-counts", JSON.stringify(counts));
+
+    setFeedback("Your story has been placed in the archive! Redirecting...");
+    
+    setTimeout(() => {
+      navigate("/stories");
+    }, 1500);
   }
 
   return (
@@ -103,7 +143,10 @@ export default function Preserve() {
             <label className="form-field">Your email <small>(optional)</small><input name="email" type="email" placeholder="So we can follow up" defaultValue="demo@virasya.org" /></label>
           </div>
           <label className="form-field story-field">The story <small>Write it how you remember it</small><textarea name="story" required rows={8} placeholder="My grandmother used to say..." defaultValue="My grandmother used to say that every recipe begins with a story. When the monsoon came, she would make a pot of khichdi and call every neighbour home. The scent of roasted cumin and ghee would fill the courtyard, a signal that the rains were here to stay. This isn't just a recipe; it's the memory of a house that was always open to everyone." /></label>
-          <label className="upload-field"><FileAudio size={20} /><span><strong>Add a voice note</strong><small>{fileName || "Optional · audio upload is MOCKED in this preview"}</small></span><input name="audio" type="file" accept="audio/*" onChange={(event) => setFileName(event.target.files?.[0]?.name || "")} /></label>
+          <div className="form-grid" style={{ marginTop: '1.5rem' }}>
+            <label className="upload-field"><ImagePlus size={20} /><span><strong>Add a thumbnail</strong><small>{thumbnailName || "Optional · select an image"}</small></span><input name="thumbnail" type="file" accept="image/*" onChange={handleImageUpload} /></label>
+            <label className="upload-field"><FileAudio size={20} /><span><strong>Add a voice note</strong><small>{fileName || "Optional · audio upload is MOCKED in this preview"}</small></span><input name="audio" type="file" accept="audio/*" onChange={(event) => setFileName(event.target.files?.[0]?.name || "")} /></label>
+          </div>
           <div className="form-footer"><p>By sharing, you agree that Virāsaya may preserve this story with care.</p><button className="button" type="submit">Place it in the archive <ArrowRight size={16} /></button></div>
         </form>
       </section>
