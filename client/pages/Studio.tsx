@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { useState, useEffect, useRef } from "react";
-import { AudioLines, Languages, LogIn, Mail, Menu, Mic, Search, Sparkles, WandSparkles, X, Trash2 } from "lucide-react";
+import { AudioLines, Languages, LogIn, Mail, Menu, Mic, Search, Sparkles, WandSparkles, X, Trash2, ArrowRightLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Mark() { return <img className="brand-logo" src="https://cdn.builder.io/api/v1/image/assets%2Fc0bee0de852d487fb3abccfc09a13758%2Fedc9c5030ad24ea5a6373f49e2efffc5?format=webp&width=800&height=1200" alt="VIRASYA" />; }
@@ -149,10 +149,16 @@ export default function Studio() {
     };
     
     try {
-      const sourceCode = sourceLang === "Hinglish" ? "hi" : "en";
+      let sourceCode = "auto";
+      if (sourceLang === "Hinglish") {
+        sourceCode = "hi";
+      } else if (langCodes[sourceLang]) {
+        sourceCode = langCodes[sourceLang];
+      }
+      
       const targetCode = langCodes[dialect] || "en";
       
-      if (sourceCode === "en" && targetCode === "en") {
+      if (sourceCode !== "auto" && sourceCode === targetCode) {
         result = memory; // No translation needed
       } else {
         // Using Google Translate's public endpoint for client-side translation without a backend
@@ -227,13 +233,29 @@ export default function Studio() {
           <textarea value={memory} onChange={(event) => { setMemory(event.target.value); setProcessed(false); }} placeholder="My grandmother used to say..." rows={9} />
         </label>
         
-        <div className="studio-input-footer" style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+        <div className="studio-input-footer" style={{ display: "flex", gap: "12px", justifyContent: "flex-end", alignItems: "flex-end" }}>
           <label className="dialect-field">Source
             <select value={sourceLang} onChange={(event) => setSourceLang(event.target.value)}>
-              <option>English</option>
-              <option>Hinglish</option>
+              <option>Auto-detect</option><option>English</option><option>Hinglish</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option>
             </select>
           </label>
+          
+          <button 
+            className="button" 
+            style={{ padding: "8px", background: "transparent", color: "var(--text)", border: "1px solid var(--border)", height: "38px", width: "38px", display: "flex", alignItems: "center", justifyContent: "center" }}
+            onClick={() => {
+              if (sourceLang !== "Hinglish" && sourceLang !== "Auto-detect") {
+                const temp = dialect;
+                setDialect(sourceLang);
+                setSourceLang(temp);
+              }
+            }}
+            title="Swap Languages"
+            disabled={sourceLang === "Hinglish" || sourceLang === "Auto-detect"}
+          >
+            <ArrowRightLeft size={16} />
+          </button>
+
           <label className="dialect-field">Target
             <select value={dialect} onChange={(event) => setDialect(event.target.value)}>
               <option>English</option><option>Hindi</option><option>Odia</option><option>Gujarati</option><option>Tamil</option><option>Telugu</option><option>Kannada</option><option>Malayalam</option><option>Haryanvi</option><option>Marathi</option><option>Assamese</option><option>Urdu</option>
